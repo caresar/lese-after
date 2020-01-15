@@ -42,7 +42,10 @@ public class TestFilter implements Filter {
         if (url.equals("/test/login")) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
-
+        //微信接口全部放开
+        }else if(url.startsWith("/weixin")){
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
         }else if (account == null) {
                 request.getRequestDispatcher("/test/toLogin").forward(request, response);
 

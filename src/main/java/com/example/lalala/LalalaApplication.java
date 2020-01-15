@@ -14,4 +14,9 @@ public class LalalaApplication {
         SpringApplication.run(LalalaApplication.class, args);
     }
 
+
+    /**
+    最后总结：Filter过滤器（放行静态资源）
+            微信登录wx.login
+    */
 }
