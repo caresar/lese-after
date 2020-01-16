@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
+import org.apache.http.ParseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -15,14 +16,19 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @RestController
@@ -130,6 +136,56 @@ public class WxController {
     public List<Map> getjifen(String tenderId){
         List<Map> getjifen = wxMapper.getjifen(tenderId);
         return getjifen;
+    }
+
+    //上传图片
+    @RequestMapping("/upload")
+    @ResponseBody
+    public String upload(@RequestParam(value = "pic") MultipartFile pic, @RequestParam Map param, Model model) throws ParseException {
+        if(pic.isEmpty()){
+            return "上传文件不可为空";
+        }
+        String filename = pic.getOriginalFilename();
+        String suffixName = filename.substring(filename.lastIndexOf("."));
+        System.out.println("后缀名："+suffixName);
+        String filePath="D:\\suibian\\lese-after\\src\\main\\resources\\static\\assets";
+        filename= UUID.randomUUID()+suffixName;
+        System.out.println("随机文件名："+filename);
+        File does=new File(filePath+filename);
+        try {
+            pic.transferTo(does);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String tenderid=String.valueOf(param.get("tenderid")).substring(1,String.valueOf(param.get("tenderid")).length()-1);
+        Map map=new HashMap();
+        map.put("tenderid",String.valueOf(param.get("tenderid")).substring(1,String.valueOf(param.get("tenderid")).length()-1));
+        map.put("phone",String.valueOf(param.get("phone")).substring(1,String.valueOf(param.get("phone")).length()-1));
+        map.put("locations",String.valueOf(param.get("locations")).substring(1,String.valueOf(param.get("locations")).length()-1));
+        map.put("filepath","http://localhost:8080/assets"+filename);
+        int i = wxMapper.insertSale(map);
+        wxMapper.updateWxuser(tenderid);
+
+        String nengliang = wxMapper.selectNL(tenderid);
+        System.out.println("能量值："+nengliang);
+        //25能量值=1等级
+        if(Integer.valueOf(nengliang)>20){
+            wxMapper.updateNL(tenderid);
+        }
+        if(i>0){
+            return "success";
+        }else{
+            return "false";
+        }
+    }
+
+    //查看我的售出列表
+    @RequestMapping("/mysale")
+    @ResponseBody
+    public List<Map> getsale(String tenderid){
+        List<Map> saleList = wxMapper.getSaleList(tenderid);
+        return saleList;
     }
 
 }
