@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -88,7 +90,8 @@ public class WxController {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         OpenIdJson openIdJson = mapper.readValue(result, OpenIdJson.class);
         System.out.println(result.toString());
-        System.out.println(openIdJson.getOpenid());
+        String tenderId = openIdJson.getOpenid();
+        login(tenderId);
         return result;
     }
 
@@ -96,7 +99,37 @@ public class WxController {
     WxMapper wxMapper;
 
     //查询小程序登录用户信息进行登录
+    private void login(String tenderId){
+        Map map = wxMapper.selectWxuser(tenderId);
+        if(map!=null){
 
+        }else{
+            wxMapper.insertWxuser(tenderId);
+        }
+    }
 
+    //查询垃圾分类
+    @RequestMapping("getFenlei")
+    @ResponseBody
+    public String getFenlei(String content){
+        if(content==null || content==""){
+            return "查询不许为空！";
+        }else{
+            String fenlei = wxMapper.getFenlei(content);
+            if(fenlei!=null && fenlei!=""){
+                return fenlei;
+            }else {
+                return "词条不足！";
+            }
+        }
+    }
+
+    //查询积分和能量值
+    @RequestMapping("/getjifen")
+    @ResponseBody
+    public List<Map> getjifen(String tenderId){
+        List<Map> getjifen = wxMapper.getjifen(tenderId);
+        return getjifen;
+    }
 
 }

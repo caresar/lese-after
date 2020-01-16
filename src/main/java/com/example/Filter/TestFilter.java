@@ -9,13 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * @author FanJiangFeng
- * @version 1.0.0
- * @ClassName TestFilter.java
- * @Description TODO
- * @createTime 2020年01月15日 14:21:00
- */
+
 @Component
 @WebFilter(urlPatterns = "/test/*",filterName = "ssoFilter")
 public class TestFilter implements Filter {
