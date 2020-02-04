@@ -40,8 +40,16 @@ public interface TestMapper {
 
 
     //测试调用存储过程
-    @Select("call pro_c_getAddressById()")
+    @Select("call test(#{ids})")
     @Options(statementType= StatementType.CALLABLE )
-    List<Map> test();
+    List<Map> test(String ids);
+
+    @Update(value = "update user set islogin=islogin+1 where account=#{account}")
+    int chaUser(String account);
+    @Update(value = "update user set islogin=islogin-1 where account=#{account}")
+    int chaUser1(String account);
+
+    @Update(value = "update user set islogin=0 where account=#{account}")
+    int chaUser2(String account);
 
 }

@@ -188,4 +188,40 @@ public class WxController {
         return saleList;
     }
 
+    //查看朋友圈（所有）
+    @RequestMapping("findPyq")
+    @ResponseBody
+    public List<Map> findPyq(){
+        List<Map> pyq = wxMapper.getPyq();
+        return pyq;
+    }
+
+    //发布动态
+    @RequestMapping("/fbdt")
+    @ResponseBody
+    public Integer fbdt(@RequestParam Map map){
+        System.out.println("动态参数："+map);
+        int fbdt = wxMapper.fbdt(map);
+        return fbdt;
+    }
+
+    //点赞
+    @RequestMapping("/dianzan")
+    @ResponseBody
+    public Integer dianzan(@RequestParam("id") Integer id,@RequestParam("tenderid") String tenderid){
+        System.out.println(id);
+        System.out.println(tenderid);
+        List<Map> getzanlist = wxMapper.getzanlist(id, tenderid);
+        int zan = 0;
+        if(getzanlist.size()>0){
+            zan = wxMapper.findZan(id);
+        }
+        else{
+            int dianzan = wxMapper.dianzan(id);
+            wxMapper.insertzanlist(id,tenderid);
+            zan = wxMapper.findZan(id);
+        }
+
+        return zan;
+    }
 }

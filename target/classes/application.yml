@@ -12,3 +12,12 @@ spring:
 server:
   port: 8080
 
+# pageHelper配置
+# 指定数据库
+pagehelper:
+  helper-dialect: mysql
+  # 页码<=0 查询第一页，页码>=总页数查询最后一页
+  reasonable: true
+  # 支持通过 Mapper 接口参数来传递分页参数
+  support-methods-arguments: true
+

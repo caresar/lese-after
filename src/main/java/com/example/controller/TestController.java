@@ -57,7 +57,9 @@ public class TestController {
         Map map = testMapper.selectUser(account, password);
         if(map!=null){
             session.setAttribute("account",map.get("account"));
+//            Data.data.put("account",map.get("account"));
             model.addAttribute("account",account);
+            testMapper.chaUser(String.valueOf(map.get("account")));
             return "forward:/test/toIndex";
         }else{
             return "forward:/test/toLogin";
@@ -67,6 +69,8 @@ public class TestController {
     //退出
     @RequestMapping("/logout")
     public String logout(HttpSession session){
+        String account = (String) session.getAttribute("account");
+        testMapper.chaUser2(account);
         session.removeAttribute("account");
         return "forward:toLogin";
     }

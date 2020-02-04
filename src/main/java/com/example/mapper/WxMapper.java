@@ -26,7 +26,7 @@ public interface WxMapper {
     List<Map> getjifen(String tenderId);
 
     //出售（上传图片）
-    @Insert(value = "insert into sale (tenderid,phone,locations,filepath) values (#{tenderid},#{phone},#{locations},#{filepath})")
+    @Insert(value = "insert into sale (tenderid,phone,locations,filepath,status,date) values (#{tenderid},#{phone},#{locations},#{filepath},'待出售',now())")
     int insertSale(Map map);
 
     //每次上传一次照片能量+5
@@ -42,6 +42,29 @@ public interface WxMapper {
     int updateNL(String tenderid);
 
     //我的售出列表
-    @Select(value = "select * from sale where tenderid=#{tenderid}")
+    @Select(value = "select * from sale where tenderid=#{tenderid} order by date desc")
     List<Map> getSaleList(String tenderid);
+
+    //查询朋友圈
+    @Select(value = "select * from pyq order by date desc")
+    List<Map> getPyq();
+
+    //发布动态
+    @Insert(value = "insert into pyq(name,txurl,content,zan_num,pinglun_num,date,tenderid) values (#{name},#{txUrl},#{content},0,0,now(),#{tenderid})")
+    int fbdt(Map map);
+
+    //点赞同时，插入点赞列表（谁点的赞，只允许点赞一次）
+    @Insert(value = "insert into zanlist(pyqid,tenderid) values(#{id},#{tenderid})")
+    int insertzanlist(@Param("id") Integer id,@Param("tenderid") String tenderid);
+
+    //查询该用户是否点过赞
+    @Select(value = "select * from zanlist where pyqid=#{id} and tenderid=#{tenderid}")
+    List<Map> getzanlist(@Param("id") Integer id,@Param("tenderid") String tenderid);
+
+    //点赞
+    @Update(value = "update pyq set zan_num=zan_num+1 where id=#{id}")
+    int dianzan(Integer id);
+    //查询点赞数量
+    @Select(value = "select zan_num from pyq where id=#{id}")
+    int findZan(Integer id);
 }
