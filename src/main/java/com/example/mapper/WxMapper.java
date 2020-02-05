@@ -69,10 +69,14 @@ public interface WxMapper {
     int findZan(Integer id);
 
     //查询评论
-    @Select(value = "select b.name,b.content from pyq a,pl_list b where a.pinglun_id=b.pinglun_id and a.pinglun_id=#{id} order by b.date asc")
+    @Select(value = "select b.name,b.content from pyq a,pl_list b where a.id=b.pinglun_id and a.id=#{id} order by b.date asc")
     List<Map> getpinglun(Integer id);
 
     //查询评论数量
-    @Select(value = "select count(*) from pyq a,pl_list b where a.pinglun_id=b.pinglun_id and a.pinglun_id=#{id}")
+    @Select(value = "select count(*) from pyq a,pl_list b where a.id=b.pinglun_id and a.id=#{id}")
     int getplCount(Integer id);
+
+    //发表评论
+    @Insert(value = "insert into pl_list(name,content,pinglun_id,date) values (#{name},#{content},#{id},now())")
+    int fbpinglun(@Param("name") String name,@Param("content") String content,@Param("id") Integer id);
 }

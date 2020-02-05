@@ -192,7 +192,7 @@ public class WxController {
         List<Map> pyq = wxMapper.getPyq();
 
         for (int i = 0; i < pyq.size(); i++) {
-            Integer pinglun_id = (Integer) pyq.get(i).get("pinglun_id");
+            Integer pinglun_id = (Integer) pyq.get(i).get("id");
             if(pinglun_id!=null){
                 List<Map> pinglun = wxMapper.getpinglun(pinglun_id);
                 pyq.get(i).put("pinglunlist",pinglun);
@@ -235,5 +235,13 @@ public class WxController {
         }
 
         return zan;
+    }
+
+    //发表评论
+    @RequestMapping("/fbpinglun")
+    @ResponseBody
+    public Integer fbpinglun(@RequestParam String name,@RequestParam String content,@RequestParam Integer id){
+        int fbpinglun = wxMapper.fbpinglun(name, content, id);
+        return fbpinglun;
     }
 }
