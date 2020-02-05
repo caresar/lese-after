@@ -25,10 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 @RestController
@@ -193,6 +190,21 @@ public class WxController {
     @ResponseBody
     public List<Map> findPyq(){
         List<Map> pyq = wxMapper.getPyq();
+
+        for (int i = 0; i < pyq.size(); i++) {
+            Integer pinglun_id = (Integer) pyq.get(i).get("pinglun_id");
+            if(pinglun_id!=null){
+                List<Map> pinglun = wxMapper.getpinglun(pinglun_id);
+                pyq.get(i).put("pinglunlist",pinglun);
+                int count = wxMapper.getplCount(pinglun_id);
+                pyq.get(i).put("pingluncount",count);
+            }else{
+                pyq.get(i).put("pinglunlist",new ArrayList<>());
+                pyq.get(i).put("pingluncount",0);
+            }
+
+        }
+        System.out.println(pyq);
         return pyq;
     }
 

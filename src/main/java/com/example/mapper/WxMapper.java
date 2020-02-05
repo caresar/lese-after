@@ -67,4 +67,12 @@ public interface WxMapper {
     //查询点赞数量
     @Select(value = "select zan_num from pyq where id=#{id}")
     int findZan(Integer id);
+
+    //查询评论
+    @Select(value = "select b.name,b.content from pyq a,pl_list b where a.pinglun_id=b.pinglun_id and a.pinglun_id=#{id} order by b.date asc")
+    List<Map> getpinglun(Integer id);
+
+    //查询评论数量
+    @Select(value = "select count(*) from pyq a,pl_list b where a.pinglun_id=b.pinglun_id and a.pinglun_id=#{id}")
+    int getplCount(Integer id);
 }
