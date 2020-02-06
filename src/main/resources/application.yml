@@ -9,8 +9,9 @@ spring:
     url: jdbc:mysql://localhost:3306/laji?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password: 123456
+
 server:
-  port: 8080
+  port: 443
   ssl:
     key-store: classpath:www.52mingliang.cn.jks
     key-store-password: 9652799zaq

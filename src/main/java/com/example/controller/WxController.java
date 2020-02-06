@@ -39,7 +39,8 @@ public class WxController {
 
     @RequestMapping("/getOpenId")
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public String getOpenId(@RequestParam("code") String code) throws JsonProcessingException {
+    public String getOpenId(String code) throws JsonProcessingException {
+        System.out.println("################## ajax进来了 ##################");
         String result = "";
         try{//请求微信服务器，用code换取openid。HttpUtil是工具类，后面会给出实现，Configure类是小程序配置信息，后面会给出代码
 //            result = HttpUtil.doGet(
