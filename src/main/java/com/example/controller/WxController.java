@@ -160,7 +160,7 @@ public class WxController {
         map.put("tenderid",String.valueOf(param.get("tenderid")).substring(1,String.valueOf(param.get("tenderid")).length()-1));
         map.put("phone",String.valueOf(param.get("phone")).substring(1,String.valueOf(param.get("phone")).length()-1));
         map.put("locations",String.valueOf(param.get("locations")).substring(1,String.valueOf(param.get("locations")).length()-1));
-        map.put("filepath","http://localhost:8080/assets"+filename);
+        map.put("filepath","http://www.52mingliang.cn:8080/assets"+filename);
         int i = wxMapper.insertSale(map);
         wxMapper.updateWxuser(tenderid);
 

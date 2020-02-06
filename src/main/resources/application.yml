@@ -5,12 +5,17 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/laji?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/laji?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     username: root
-    password: 1234
+    password: 123456
 server:
   port: 8080
+  ssl:
+    key-store: classpath:www.52mingliang.cn.jks
+    key-store-password: 9652799zaq
+    key-store-type: JKS
+#    key-alias: www.52mingliang.cn.jks
 
 # pageHelper配置
 # 指定数据库
